@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+ <defs>
+  <linearGradient id="base" x2=".1" y2="1"><stop stop-color="#d9e5d0"/><stop offset="1" stop-color="#9cb7a1"/></linearGradient>
+  <linearGradient id="water" x2="0" y2="1"><stop stop-color="#7dc1d1"/><stop offset="1" stop-color="#478fa9"/></linearGradient>
+  <linearGradient id="land" x2="1" y2="1"><stop stop-color="#c7d2a6"/><stop offset=".5" stop-color="#8da879"/><stop offset="1" stop-color="#d4c89b"/></linearGradient>
+  <filter id="shadow" x="-.5" y="-.5" width="2" height="2"><feGaussianBlur stdDeviation="18"/></filter>
+  <filter id="grain"><feTurbulence type="fractalNoise" baseFrequency=".7" numOctaves="2" stitchTiles="stitch"/><feColorMatrix values=".5 0 0 0 .2 .5 0 0 0 .2 .5 0 0 0 .2 0 0 0 .13 0"/></filter>
+  <clipPath id="round"><rect x="0" y="0" width="1024" height="1024" rx="220"/></clipPath>
+ </defs>
+ <g clip-path="url(#round)">
+  <rect width="1024" height="1024" fill="url(#water)"/>
+  <path d="M-70 95 130 20 286 88 419 52 561 138 690 106 810 180 1040 107 1080 740 972 815 820 780 684 845 527 790 385 875 220 815 74 890-30 835Z" fill="#000" opacity=".24" filter="url(#shadow)"/>
+  <path d="M-60 55 118 5 266 77 401 37 547 126 682 88 807 165 1045 88 1080 713 964 790 814 750 674 819 518 761 376 846 211 784 61 858-30 803Z" fill="url(#land)"/>
+  <path d="M-30 213 128 171 214 232 354 180 462 242 565 204 692 279 815 232 1039 315M-20 435 116 389 258 444 384 376 518 432 658 385 784 464 930 417 1040 453M-40 662 103 609 245 664 359 600 491 659 612 594 743 672 880 612 1040 652" fill="none" stroke="#e6dfc0" stroke-width="25" opacity=".95"/>
+  <path d="M85 -20 145 155 111 310 167 449 130 605 189 786 147 1045M310 -20 350 140 315 280 383 430 342 564 405 740 372 1040M568 -30 526 130 594 300 547 465 620 622 581 800 638 1045M825 -20 773 163 837 317 794 482 861 647 819 840 876 1040" fill="none" stroke="#f5efda" stroke-width="19" opacity=".9"/>
+  <path d="M-40 301 126 272 245 316 363 275 489 332 620 291 744 354 889 308 1050 354M-20 548 131 509 270 553 400 516 523 572 663 526 784 586 920 541 1050 572M-30 765 114 729 256 772 386 739 511 793 654 744 784 805 922 758 1050 790" fill="none" stroke="#9b8f6f" stroke-width="5" opacity=".42"/>
+  <path d="M-20 888C170 840 236 900 347 849S548 814 637 866s221 17 414-55" fill="none" stroke="#f9f3df" stroke-width="14" opacity=".8"/>
+  <path d="M-60 105 50 65 135 80 178 141 160 199 73 219-15 185ZM600 516l83-33 64 23 27 67-48 55-99-14-53-41Z" fill="#83a779" opacity=".65"/>
+  <g transform="translate(617 391)">
+   <ellipse cx="0" cy="218" rx="96" ry="27" fill="#213d47" opacity=".28" filter="url(#shadow)"/>
+   <path d="M0 188C-24 148-105 69-105-12a105 105 0 1 1 210 0c0 81-81 160-105 200Z" fill="#f8f4e9"/>
+   <circle cy="-13" r="76" fill="#da5c43"/>
+   <circle cy="-13" r="45" fill="#fff4e6"/>
+   <circle cy="-13" r="19" fill="#da5c43"/>
+  </g>
+  <rect width="1024" height="1024" filter="url(#grain)" opacity=".2"/>
+  <rect x="28" y="28" width="968" height="968" rx="200" fill="none" stroke="#fff" stroke-opacity=".14" stroke-width="5"/>
+ </g>
+</svg>
