@@ -7,7 +7,7 @@ App web para celular: tabelas tipo Excel (Cliente, Local, Endereço, CEP) com at
 ```
 rotas-clientes/
 ├── index.html              # app inteiro (HTML + CSS + JS)
-├── manifest.webmanifest    # permite instalar na tela inicial
+├── manifest.json    # permite instalar na tela inicial
 ├── sw.js                   # service worker: instalação no Android e uso offline
 ├── README.md
 └── assets/
@@ -31,3 +31,7 @@ Abra o endereço do GitHub Pages no Chrome e toque em **Instalar app** (botão n
 ## Gerar um APK (opcional)
 
 Com o site publicado, cole o endereço em https://www.pwabuilder.com e escolha Android para baixar o pacote (APK/AAB).
+
+## Diagnóstico de instalação
+
+Abra o endereço do app seguido de `#diagnostico` para ver o que está faltando para o Android instalar o app (manifest, ícones, service worker).
