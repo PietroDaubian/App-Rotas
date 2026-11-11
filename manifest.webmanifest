@@ -4,7 +4,7 @@
   "start_url": ".",
   "display": "standalone",
   "background_color": "#f4f5f7",
-  "theme_color": "#478fa9",
+  "theme_color": "#f4f5f7",
   "lang": "pt-BR",
   "icons": [
     {
@@ -22,6 +22,16 @@
       "src": "assets/icons/icon-1024.png",
       "sizes": "1024x1024",
       "type": "image/png"
+    },
+    {
+      "src": "assets/icons/icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
     }
-  ]
+  ],
+  "id": ".",
+  "scope": ".",
+  "orientation": "portrait",
+  "prefer_related_applications": false
 }

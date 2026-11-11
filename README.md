@@ -8,6 +8,7 @@ App web para celular: tabelas tipo Excel (Cliente, Local, Endereço, CEP) com at
 rotas-clientes/
 ├── index.html              # app inteiro (HTML + CSS + JS)
 ├── manifest.webmanifest    # permite instalar na tela inicial
+├── sw.js                   # service worker: instalação no Android e uso offline
 ├── README.md
 └── assets/
     └── icons/              # icon.svg (original) e PNGs 180, 192, 512, 1024
@@ -22,3 +23,11 @@ rotas-clientes/
 ## Para crescer depois
 
 Quando o `index.html` ficar grande, separe em `css/style.css` e `js/app.js` e adicione outras pastas dentro de `assets/`.
+
+## Instalar no Android
+
+Abra o endereço do GitHub Pages no Chrome e toque em **Instalar app** (botão no topo do app ou menu ⋮). O app vai para a gaveta de aplicativos, sem barras do navegador.
+
+## Gerar um APK (opcional)
+
+Com o site publicado, cole o endereço em https://www.pwabuilder.com e escolha Android para baixar o pacote (APK/AAB).
