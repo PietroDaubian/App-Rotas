@@ -4,6 +4,12 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
+<link rel="icon" type="image/svg+xml" href="assets/icons/icon.svg">
+<link rel="icon" type="image/png" sizes="192x192" href="assets/icons/icon-192.png">
+<link rel="apple-touch-icon" href="assets/icons/icon-180.png">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#478fa9">
+<meta name="apple-mobile-web-app-title" content="Rotas">
 <title>Rotas de Clientes</title>
 <style>
 :root{--bg:#f4f5f7;--card:#fff;--tx:#14181f;--mu:#6b7480;--ln:#e3e6ea;--ac:#2f6df6;--ac2:#eaf1ff;--dg:#e5484d;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
@@ -29,12 +35,12 @@ h1{margin:0;font-size:26px;letter-spacing:-.02em}
 #wrap{margin:0 12px;background:var(--card);border:1px solid var(--ln);border-radius:16px;overflow-x:auto;animation:fd .6s .1s ease both}
 .tbl{min-width:720px}
 .row{display:grid;grid-template-columns:36px minmax(140px,1fr) minmax(120px,1fr) minmax(200px,2fr) 104px 88px;align-items:center;border-bottom:1px solid var(--ln);max-height:80px;overflow:hidden;transition:max-height .3s ease,opacity .3s ease,transform .3s ease}
-.row.in{animation:rin .4s cubic-bezier(.2,.9,.3,1)}
+.row.in{animation:rin .45s cubic-bezier(.2,.9,.3,1) both;animation-delay:calc(var(--i,0)*35ms)}
 .row.out{max-height:0;opacity:0;transform:translateX(-24px);border-color:transparent}
 .row.hide{display:none}
 .row.head{background:var(--ac2);color:var(--mu);font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;padding:10px 0}
 .row.head>div{padding:0 10px}
-.n{color:var(--mu);font-size:13px;text-align:center}
+.n{margin:auto;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;color:var(--mu);font-size:13px;cursor:pointer;transition:background .25s,color .25s,transform .15s}.n:active{transform:scale(.85)}.row.done .n{background:#2fa866;color:#fff;animation:pop .35s cubic-bezier(.2,1.5,.3,1)}.row.done input{opacity:.5}#wrap{box-shadow:0 12px 32px -14px rgba(20,24,31,.28)}.brand{display:flex;align-items:center;gap:14px}.logo{width:56px;height:56px;border-radius:15px;box-shadow:0 8px 20px -6px rgba(0,0,0,.35);animation:spring .9s cubic-bezier(.2,1.4,.3,1) both}.pg{height:6px;border-radius:6px;background:var(--ln);margin-top:14px;overflow:hidden}.pg i{display:block;height:100%;width:0;border-radius:6px;background:linear-gradient(90deg,#2fa866,#6fd09a);transition:width .6s cubic-bezier(.2,.9,.3,1)}@keyframes pop{50%{transform:scale(1.35)}}@keyframes spring{from{opacity:0;transform:scale(.3) rotate(-14deg)}}
 .row input{width:100%;border:0;background:transparent;color:var(--tx);padding:15px 10px;font:inherit;outline:none;border-radius:6px;transition:box-shadow .2s,background .2s}
 .row input:focus{box-shadow:inset 0 0 0 2px var(--ac);background:var(--ac2)}
 .row input.bad{animation:shk .35s}
@@ -67,9 +73,9 @@ h1{margin:0;font-size:26px;letter-spacing:-.02em}
 </style>
 </head>
 <body>
-<header><h1>Rotas de Clientes</h1><div class="sub" id="cnt"></div><button class="chip" id="acc">☁ Só neste aparelho</button></header>
+<header><div class="brand"><img class="logo" id="logo" alt="" src="assets/icons/icon-192.png"><div><h1>Rotas de Clientes</h1><div class="sub" id="cnt"></div></div></div><div class="pg"><i id="pb"></i></div><button class="chip" id="acc">☁ Só neste aparelho</button></header>
 <div class="bar" id="tabs"></div>
-<div class="tools"><input id="tn" placeholder="Nome da tabela"><input id="q" type="search" placeholder="Buscar…"><select class="btn" id="mp" aria-label="App de mapas"><option value="auto">Mapa: automático</option><option value="g">Google Maps</option><option value="a">Apple Maps</option><option value="ask">Perguntar</option></select><button class="btn" id="dt">Excluir</button></div>
+<div class="tools"><input id="tn" placeholder="Nome da tabela"><input id="q" type="search" placeholder="Buscar…"><button class="btn" id="rt">Rota completa</button><select class="btn" id="mp" aria-label="App de mapas"><option value="auto">Mapa: automático</option><option value="g">Google Maps</option><option value="a">Apple Maps</option><option value="ask">Perguntar</option></select><button class="btn" id="dt">Excluir</button></div>
 <div class="tools" style="padding-top:0"><input id="td" placeholder="Observação da tabela (opcional)"></div>
 <div id="wrap"><div class="tbl">
 <div class="row head"><div>#</div><div>Cliente</div><div>Local</div><div>Endereço</div><div>CEP</div><div></div></div>
@@ -97,7 +103,7 @@ const esc=s=>String(s||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(
 const cep=v=>{v=v.replace(/\D/g,'').slice(0,8);return v.length>5?v.slice(0,5)+'-'+v.slice(5):v};
 const apple=/iPhone|iPad|iPod|Macintosh/.test(navigator.userAgent);
 const PIN='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s7-6.2 7-11.5A7 7 0 0 0 5 9.5C5 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>';
-const rowHTML=(r,i,anim)=>`<div class="row${anim?' in':''}" data-id="${r.id}"><div class="n">${i+1}</div>`+F.map(f=>`<input data-f="${f[0]}" value="${esc(r[f[0]])}" placeholder="${f[1]}" ${f[0]=='p'?'inputmode="numeric"':''} autocomplete="off">`).join('')+`<div class="act"><button class="go" aria-label="Abrir no mapa">${PIN}</button><button class="del" aria-label="Remover linha">✕</button></div></div>`;
+const rowHTML=(r,i,anim)=>`<div class="row${anim?' in':''}${r.d?' done':''}" style="--i:${anim===true?Math.min(i,10):0}" data-id="${r.id}"><div class="n">${i+1}</div>`+F.map(f=>`<input data-f="${f[0]}" value="${esc(r[f[0]])}" placeholder="${f[1]}" ${f[0]=='p'?'inputmode="numeric"':''} autocomplete="off">`).join('')+`<div class="act"><button class="go" aria-label="Abrir no mapa">${PIN}</button><button class="del" aria-label="Remover linha">✕</button></div></div>`;
 function render(){
  $('#tabs').innerHTML=S.tables.map((t,i)=>`<button class="tab${i==S.active?' on':''}" data-i="${i}">${esc(t.name)||'Sem nome'}</button>`).join('')+'<button class="tab add" data-add>+ Tabela</button>';
  $('#tn').value=T().name;$('#td').value=T().note||'';
@@ -105,17 +111,19 @@ function render(){
  $('#dt').classList.remove('warn');$('#dt').textContent='Excluir';
  info();filter();
 }
-function info(){const n=T().rows.length;$('#cnt').textContent=n+(n==1?' cliente':' clientes')+' nesta tabela';$('#dt').style.display=S.tables.length>1?'':'none'}
+const buzz=()=>{try{navigator.vibrate&&navigator.vibrate(12)}catch(e){}};
+function info(){const R=T().rows,n=R.length,d=R.filter(r=>r.d).length;$('#cnt').textContent=n+(n==1?' cliente':' clientes')+(d?' · '+d+' visitados':'');$('#pb').style.width=(n?d/n*100:0)+'%';$('#dt').style.display=S.tables.length>1?'':'none'}
 function filter(){const q=$('#q').value.toLowerCase();document.querySelectorAll('#rows .row').forEach(el=>{const t=[...el.querySelectorAll('input')].map(i=>i.value).join(' ').toLowerCase();el.classList.toggle('hide',!!q&&!t.includes(q))})}
 function renum(){document.querySelectorAll('#rows .row .n').forEach((n,i)=>n.textContent=i+1);info()}
 function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('on');clearTimeout(toast.h);toast.h=setTimeout(()=>t.classList.remove('on'),2200)}
-function addRow(focusF){const r={id:++seq,c:'',l:'',e:'',p:''};T().rows.push(r);save();$('#rows').insertAdjacentHTML('beforeend',rowHTML(r,T().rows.length-1,true));info();const el=$('#rows').lastElementChild;el.scrollIntoView({block:'center',behavior:'smooth'});setTimeout(()=>el.querySelector('[data-f="'+(focusF||'c')+'"]').focus({preventScroll:true}),60)}
+function addRow(focusF){const r={id:++seq,c:'',l:'',e:'',p:''};T().rows.push(r);save();$('#rows').insertAdjacentHTML('beforeend',rowHTML(r,T().rows.length-1,1));info();const el=$('#rows').lastElementChild;el.scrollIntoView({block:'center',behavior:'smooth'});setTimeout(()=>el.querySelector('[data-f="'+(focusF||'c')+'"]').focus({preventScroll:true}),60)}
 const find=el=>T().rows.find(r=>r.id==el.closest('.row').dataset.id);
 $('#rows').addEventListener('input',e=>{const i=e.target;if(i.dataset.f=='p')i.value=cep(i.value);find(i)[i.dataset.f]=i.value;save();if($('#q').value)filter()});
 $('#rows').addEventListener('keydown',e=>{if(e.key!='Enter')return;e.preventDefault();const row=e.target.closest('.row'),next=row.nextElementSibling;if(next)next.querySelector('[data-f="'+e.target.dataset.f+'"]').focus();else addRow(e.target.dataset.f)});
 $('#rows').addEventListener('click',e=>{
  const row=e.target.closest('.row');if(!row)return;
- if(e.target.closest('.go'))openMap(find(row),row);
+ if(e.target.closest('.n')){const r=find(row);r.d=!r.d;row.classList.toggle('done',r.d);save();info();buzz()}
+ if(e.target.closest('.go')){buzz();openMap(find(row),row)}
  if(e.target.closest('.del')){row.classList.add('out');setTimeout(()=>{T().rows=T().rows.filter(r=>r.id!=row.dataset.id);save();row.remove();renum()},300)}
 });
 function openMap(r,row){
@@ -159,6 +167,8 @@ $('#acc').onclick=()=>toast(DOC?'Seus dados estão salvos na sua conta':'Abra pe
  if(c&&c.json&&c.ts>(S.ts||0)){S=JSON.parse(c.json);if(S.active>=S.tables.length)S.active=0;try{localStorage.setItem(K,JSON.stringify(S))}catch(e){}render();setChip('Conta sincronizada');toast('Dados da conta carregados')}
  else{setChip('Conta conectada');if(S.tables.some(t=>t.rows.some(r=>r.c||r.l||r.e||r.p))){S.ts=S.ts||Date.now();push()}}
 }catch(e){}})();
+$('#rt').onclick=()=>{const a=T().rows.filter(r=>!r.d&&(r.e||r.p)).map(r=>[r.e,r.p].filter(Boolean).join(', ')+', Brasil');if(!a.length)return toast('Nenhum endereço pendente');const p=a.slice(0,10),dest=p.pop();const u='https://www.google.com/maps/dir/?api=1&destination='+encodeURIComponent(dest)+(p.length?'&waypoints='+p.map(encodeURIComponent).join('%7C'):'');if(!window.open(u,'_blank'))toast('Não foi possível abrir o mapa');else if(a.length>10)toast('Limite de 10 paradas: abri as 10 primeiras')};
+$('#rows').addEventListener('paste',e=>{const t=(e.clipboardData||window.clipboardData).getData('text');if(!/[\t\n]/.test(t.trim()))return;e.preventDefault();const ks=F.map(f=>f[0]),ri=[...$('#rows').children].indexOf(e.target.closest('.row')),ci=ks.indexOf(e.target.dataset.f);t.replace(/\r/g,'').replace(/\n$/,'').split('\n').forEach((ln,k)=>{while(T().rows.length<=ri+k)T().rows.push({id:++seq,c:'',l:'',e:'',p:''});const r=T().rows[ri+k];ln.split('\t').forEach((v,j)=>{const key=ks[ci+j];if(key)r[key]=key=='p'?cep(v.trim()):v.trim()})});save();render();toast('Colado da planilha')});
 </script>
 </body>
 </html>
