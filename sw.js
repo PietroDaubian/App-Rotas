@@ -1,7 +1,7 @@
 // Service worker: permite instalar o app e usá-lo offline.
 // Ao publicar uma nova versão, troque o número em V para renovar o cache.
-const V = 'rotas-v1';
-const ARQUIVOS = ['./', './index.html', './manifest.json', './assets/icons/icon.svg', './assets/icons/icon-192.png', './assets/icons/icon-512.png'];
+const V = 'rotas-v2';
+const ARQUIVOS = ['./', './index.html', './manifest.webmanifest', './icon.svg', './icon-192.png', './icon-512.png', './apple-touch-icon.png'];
 
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(V).then(c => Promise.all(ARQUIVOS.map(a => c.add(a).catch(() => {})))).then(() => self.skipWaiting()));
