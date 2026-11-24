@@ -35,8 +35,8 @@ h1{margin:0;font-size:26px;letter-spacing:-.02em}
 .btn:active{transform:scale(.93)}
 .btn.warn{background:var(--dg);color:#fff}
 #wrap{margin:0 12px;background:var(--card);border:1px solid var(--ln);border-radius:16px;overflow-x:auto;animation:fd .6s .1s ease both}
-.tbl{min-width:720px}
-.row{display:grid;grid-template-columns:36px minmax(140px,1fr) minmax(120px,1fr) minmax(200px,2fr) 104px 88px;align-items:center;border-bottom:1px solid var(--ln);max-height:80px;overflow:hidden;transition:max-height .3s ease,opacity .3s ease,transform .3s ease}
+.tbl{min-width:860px}
+.row{display:grid;grid-template-columns:36px minmax(140px,1fr) minmax(140px,1fr) minmax(120px,1fr) minmax(200px,2fr) 104px 88px;align-items:center;border-bottom:1px solid var(--ln);max-height:80px;overflow:hidden;transition:max-height .3s ease,opacity .3s ease,transform .3s ease}
 .row.in{animation:rin .45s cubic-bezier(.2,.9,.3,1) both;animation-delay:calc(var(--i,0)*35ms)}
 .row.out{max-height:0;opacity:0;transform:translateX(-24px);border-color:transparent}
 .row.hide{display:none}
@@ -81,7 +81,7 @@ html,body{overscroll-behavior:none;touch-action:manipulation;-webkit-text-size-a
 <div class="tools"><input id="tn" placeholder="Nome da tabela"><input id="q" type="search" placeholder="Buscar…"><button class="btn" id="rt">Rota completa</button><select class="btn" id="mp" aria-label="App de mapas"><option value="auto">Mapa: automático</option><option value="g">Google Maps</option><option value="a">Apple Maps</option><option value="ask">Perguntar</option></select><button class="btn" id="dt">Excluir</button></div>
 <div class="tools" style="padding-top:0"><input id="td" placeholder="Observação da tabela (opcional)"></div>
 <div id="wrap"><div class="tbl">
-<div class="row head"><div>#</div><div>Cliente</div><div>Local</div><div>Endereço</div><div>CEP</div><div></div></div>
+<div class="row head"><div>#</div><div>Cliente</div><div>Responsável</div><div>Cidade</div><div>Endereço</div><div>CEP</div><div></div></div>
 <div id="rows"></div></div></div>
 <div class="spacer"></div>
 <button class="fab" id="fab">+ Linha</button>
@@ -93,7 +93,7 @@ html,body{overscroll-behavior:none;touch-action:manipulation;-webkit-text-size-a
 <div class="toast" id="toast"></div>
 <script>
 const K='rotas-clientes-v1',$=s=>document.querySelector(s);
-const F=[['c','Cliente'],['l','Local'],['e','Endereço'],['p','CEP']];
+const F=[['c','Cliente'],['r','Responsável'],['l','Cidade'],['e','Endereço'],['p','CEP']];
 let S=null,seq=Date.now();
 try{S=JSON.parse(localStorage.getItem(K))}catch(e){}
 if(!S||!S.tables||!S.tables.length)S={active:0,tables:[{name:'Clientes',rows:[{id:1,c:'',l:'',e:'',p:''}]}]};
@@ -130,7 +130,7 @@ $('#rows').addEventListener('click',e=>{
  if(e.target.closest('.del')){row.classList.add('out');setTimeout(()=>{T().rows=T().rows.filter(r=>r.id!=row.dataset.id);save();row.remove();renum()},300)}
 });
 function openMap(r,row){
- const addr=[r.e,r.p].filter(Boolean).join(', ')||r.l;
+ const addr=[r.e,r.l,r.p].filter(Boolean).join(', ');
  if(!addr.trim()){const i=row.querySelector('[data-f="e"]');i.classList.remove('bad');void i.offsetWidth;i.classList.add('bad');i.focus();toast('Preencha o endereço primeiro');return}
  const q=encodeURIComponent(addr+', Brasil');
  const G='https://www.google.com/maps/dir/?api=1&destination='+q,A='https://maps.apple.com/?daddr='+q;
@@ -170,7 +170,7 @@ $('#acc').onclick=()=>toast(DOC?'Seus dados estão salvos na sua conta':'Abra pe
  if(c&&c.json&&c.ts>(S.ts||0)){S=JSON.parse(c.json);if(S.active>=S.tables.length)S.active=0;try{localStorage.setItem(K,JSON.stringify(S))}catch(e){}render();setChip('Conta sincronizada');toast('Dados da conta carregados')}
  else{setChip('Conta conectada');if(S.tables.some(t=>t.rows.some(r=>r.c||r.l||r.e||r.p))){S.ts=S.ts||Date.now();push()}}
 }catch(e){}})();
-$('#rt').onclick=()=>{const a=T().rows.filter(r=>!r.d&&(r.e||r.p)).map(r=>[r.e,r.p].filter(Boolean).join(', ')+', Brasil');if(!a.length)return toast('Nenhum endereço pendente');const p=a.slice(0,10),dest=p.pop();const u='https://www.google.com/maps/dir/?api=1&destination='+encodeURIComponent(dest)+(p.length?'&waypoints='+p.map(encodeURIComponent).join('%7C'):'');if(!window.open(u,'_blank'))toast('Não foi possível abrir o mapa');else if(a.length>10)toast('Limite de 10 paradas: abri as 10 primeiras')};
+$('#rt').onclick=()=>{const a=T().rows.filter(r=>!r.d&&(r.e||r.p)).map(r=>[r.e,r.l,r.p].filter(Boolean).join(', ')+', Brasil');if(!a.length)return toast('Nenhum endereço pendente');const p=a.slice(0,10),dest=p.pop();const u='https://www.google.com/maps/dir/?api=1&destination='+encodeURIComponent(dest)+(p.length?'&waypoints='+p.map(encodeURIComponent).join('%7C'):'');if(!window.open(u,'_blank'))toast('Não foi possível abrir o mapa');else if(a.length>10)toast('Limite de 10 paradas: abri as 10 primeiras')};
 $('#rows').addEventListener('paste',e=>{const t=(e.clipboardData||window.clipboardData).getData('text');if(!/[\t\n]/.test(t.trim()))return;e.preventDefault();const ks=F.map(f=>f[0]),ri=[...$('#rows').children].indexOf(e.target.closest('.row')),ci=ks.indexOf(e.target.dataset.f);t.replace(/\r/g,'').replace(/\n$/,'').split('\n').forEach((ln,k)=>{while(T().rows.length<=ri+k)T().rows.push({id:++seq,c:'',l:'',e:'',p:''});const r=T().rows[ri+k];ln.split('\t').forEach((v,j)=>{const key=ks[ci+j];if(key)r[key]=key=='p'?cep(v.trim()):v.trim()})});save();render();toast('Colado da planilha')});
 {const st=matchMedia('(display-mode: standalone)').matches||navigator.standalone;let off;try{off=localStorage.getItem('tip')}catch(e){}
 if(!st&&!off&&/iPhone|iPad|Android/.test(navigator.userAgent)){const t=document.createElement('div');t.className='tip';t.innerHTML='<span>'+(/SamsungBrowser/.test(navigator.userAgent)?'Para tirar as barras: abra no Chrome e toque em Instalar app.':/Android/.test(navigator.userAgent)?'Para tirar as barras do navegador: menu ⋮ e Instalar app.':'Para tirar as barras do navegador: Compartilhar e Adicionar à Tela de Início.')+'</span><b>✕</b>';t.onclick=()=>{t.remove();try{localStorage.setItem('tip',1)}catch(e){}};$('#tabs').before(t)}}
